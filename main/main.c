@@ -1055,7 +1055,7 @@ void uart_console_task(void *pvParameters)
     struct cmdBuf commands;
     commands.sendToUART = 0;
     commands.state=CMDSTATE_IDLE;
-    uint8_t kbdcmd[] = {0};
+    uint8_t kbdcmd[0] = 0;
 
 
     //Install UART driver, and get the queue.
