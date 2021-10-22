@@ -1,0 +1,6 @@
+source "/Users/omsheladia/esp/esp-idf/components/app_update/Kconfig.projbuild"
+source "/Users/omsheladia/esp/esp-idf/components/bootloader/Kconfig.projbuild"
+source "/Users/omsheladia/esp/esp-idf/components/esptool_py/Kconfig.projbuild"
+source "/Users/omsheladia/esp/esp-idf/components/partition_table/Kconfig.projbuild"
+source "/Users/omsheladia/Desktop/JoystickTesting/main/Kconfig.projbuild"
+source "/Users/omsheladia/Desktop/JoystickTesting/components/esp32_mouse/Kconfig.projbuild"

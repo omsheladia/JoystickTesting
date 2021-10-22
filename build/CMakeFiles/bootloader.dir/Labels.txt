@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/Users/omsheladia/Desktop/JoystickTesting/build/CMakeFiles/bootloader
+/Users/omsheladia/Desktop/JoystickTesting/build/CMakeFiles/bootloader.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/CMakeFiles/bootloader-complete.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/Users/omsheladia/Desktop/JoystickTesting/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

@@ -84,6 +84,7 @@
  */
 
 #define HID_DEMO_TAG "HID_DEMO"
+#define HIDD_DEVICE_NAME            "ESP32Joystick"
 
 
 
@@ -131,6 +132,7 @@ uint64_t timestampLastSent;
  * the mousebuttons must be the same
  * @see periodicHIDCallback */
 uint8_t mouseButtons = 0;
+uint8_t kbdcmd[] = {4};
 
 /** "Keepalive" rate when in idle (no HID commands)
  * @note Microseconds!
@@ -264,10 +266,14 @@ int get_int(const char * input, int index, int * value)
 /** Periodic sending of empty HID reports if no updates are sent via API */
 static void periodicHIDCallback(void* arg)
 {
+
 	if(abs(esp_timer_get_time()-timestampLastSent) > HID_IDLE_UPDATE_RATE)
 	{
 		//send empty report (but with last known button state)
 		esp_hidd_send_mouse_value(hid_conn_id,mouseButtons,0,0,0);
+        esp_hidd_send_keyboard_value(hid_conn_id,0,kbdcmd,1);
+
+
 		//save timestamp for next call
 		timestampLastSent = esp_timer_get_time();
 		ESP_LOGI(HID_DEMO_TAG,"Idle...");
@@ -297,7 +303,8 @@ static void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *
     case ESP_HIDD_EVENT_REG_FINISH: {
         if (param->init_finish.state == ESP_HIDD_INIT_OK) {
             //esp_bd_addr_t rand_addr = {0x04,0x11,0x11,0x11,0x11,0x05};
-            esp_ble_gap_set_device_name(config.bt_device_name);
+            esp_ble_gap_set_device_name(HIDD_DEVICE_NAME)
+;
             esp_ble_gap_config_adv_data(&hidd_adv_data);
         }
         break;
@@ -1055,7 +1062,8 @@ void uart_console_task(void *pvParameters)
     struct cmdBuf commands;
     commands.sendToUART = 0;
     commands.state=CMDSTATE_IDLE;
-    uint8_t kbdcmd[0] = 0;
+    //uint8_t kbdcmd[] = {0};
+    uint8_t kbdcmd[] = {HID_KEY_A};
 
 
     //Install UART driver, and get the queue.
@@ -1093,33 +1101,37 @@ void uart_console_task(void *pvParameters)
     adc1_config_width(ADC_WIDTH_BIT_12);
     adc1_config_channel_atten(ADC1_CHANNEL_3,ADC_ATTEN_DB_11); 
     int val1 = adc1_get_raw(ADC1_CHANNEL_3);
-    adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(ADC1_CHANNEL_6,ADC_ATTEN_DB_11); 
-    int val2 = adc1_get_raw(ADC1_CHANNEL_6);
+    //adc1_config_width(ADC_WIDTH_BIT_12);
+    //adc1_config_channel_atten(ADC1_CHANNEL_6,ADC_ATTEN_DB_11); 
+    //int val2 = adc1_get_raw(ADC1_CHANNEL_6);
     while(1)
     {   
      //  val = adc1_get_raw(ADC1_CHANNEL_0);
        val1 = adc1_get_raw(ADC1_CHANNEL_3);
-       val2 = adc1_get_raw(ADC1_CHANNEL_6);
+       //val2 = adc1_get_raw(ADC1_CHANNEL_6);
      //printf("Value : %d ",  val);
       if(val1>=0&&val1<=1000)
        {
-            printf("Forwards");//printf("Value1 : %d ",  val1);
-          kbdcmd[0] = 44;
+          printf("Forwards");//printf("Value1 : %d ",  val1);
+          // kbdcmd[0] = 4;
+          // esp_hidd_send_keyboard_value(hid_conn_id,0,kbdcmd,1);
+          // kbdcmd[0] = 0;
+          // esp_hidd_send_keyboard_value(hid_conn_id,0,kbdcmd,1);
+
           esp_hidd_send_keyboard_value(hid_conn_id,0,kbdcmd,1);
-          kbdcmd[0] = 0;
-          esp_hidd_send_keyboard_value(hid_conn_id,0,kbdcmd,1);
-          ESP_LOGI(CONSOLE_UART_TAG," sending key SPACE (z for QWERTZ) for test purposes");
+          //kbdcmd[0] = 0;
+          //esp_hidd_send_keyboard_value(hid_conn_id,0,kbdcmd,1); 
+          ESP_LOGI(CONSOLE_UART_TAG," sending key SPACE  for test purposes");
     }
        
       else if(val1>=4000&&val1<=4095)
        {
             printf("Backwards");  //printf("Value2 : %d ",  val2);
     } 
-      else if(val2>=0&&val2<=1000)
-       {
-            printf("Right");  //printf("Value2 : %d ",  val2);
-    }
+    //   else if(val2>=0&&val2<=1000)
+    //    {
+    //         printf("Right");  //printf("Value2 : %d ",  val2);
+    // }
           printf("\n");
      // printf("%d\n","%d\n",val1,val2);
         vTaskDelay(10 / portTICK_PERIOD_MS);  
